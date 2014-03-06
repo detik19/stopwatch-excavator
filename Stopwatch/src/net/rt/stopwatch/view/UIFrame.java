@@ -77,9 +77,9 @@ public class UIFrame extends javax.swing.JFrame {
 	private JPanel jPanelID;
 	private JPanel jPanelControl;
 	private JPanel jPanelTop;
-	private String[] judul= {"No","Digging", "Swing Loaded", "Dumping", "SwingUnloaded", "CYCLE TIME", "WAIT DT", "REPOSISI","REPAIR FRONT"};
+	private String[] judul= {"No","Digging", "Swing Loaded", "Dumping", "SwingUnloaded", "CYCLE TIME"};
 	private Object[][] data= {};
-
+	private int kolom=1;
 	/**
 	* Auto-generated main method to display this JFrame
 	*/
@@ -165,6 +165,8 @@ public class UIFrame extends javax.swing.JFrame {
 					jPanelControl.add(splitButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					splitButton.setText("Split");
 					splitButton.setPreferredSize(new java.awt.Dimension(100, 30));
+					splitButton.addActionListener(listener);
+
 				}
 			}
 			{
@@ -278,6 +280,9 @@ public class UIFrame extends javax.swing.JFrame {
 		}
 	}
 	private class ButtonListener implements ActionListener {
+		int baris=0;
+		int kolom=0;
+				
 		public void actionPerformed(ActionEvent event) {
 
 		
@@ -299,8 +304,32 @@ public class UIFrame extends javax.swing.JFrame {
 				ledLabel.setIcon(ledOff);
 				stopWatch.reset();
 			}
-			
+			if(event.getSource() == splitButton){
+				updateTable(stopWatch.toString());
+				//updateTable(stopWatch.toString(),baris, kolom );
+			}
 			timeWindow.setText(stopWatch.toString());
 		}
+	}
+	
+	private void updateTable(String value){
+		
+		Object [][] temp = new Object[data.length+1][6];
+		
+		//inisialisasi
+		for(int brs=0;brs<data.length;brs++)
+		{
+			for(int klm=0;klm<4;klm++)
+			{
+				temp[brs][klm]=data[brs][klm];
+			}
+		}		
+		//fill data
+		kolom++;
+		temp[data.length][kolom]=value;
+
+		data=temp;
+		jTableMain.setModel(new DefaultTableModel(data, judul));
+
 	}
 }
