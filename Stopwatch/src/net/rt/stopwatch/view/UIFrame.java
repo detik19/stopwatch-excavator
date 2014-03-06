@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
@@ -38,6 +39,16 @@ import net.rt.stopwatch.model.StopWatch;
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
 public class UIFrame extends javax.swing.JFrame {
+
+	{
+		//Set Look & Feel
+		try {
+			javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private StopWatch stopWatch;
 	
 	private JButton startButton;
@@ -50,14 +61,24 @@ public class UIFrame extends javax.swing.JFrame {
 	private boolean ledStatus = false;
 	private JLabel ledLabel;
 	private ImageIcon ledOn;
-	private JScrollPane jScrollPane2;
-	private JTable jTableAux;
 	private JScrollPane jScrollPane1;
 	private JTable jTableMain;
 	private JPanel jPanelTable;
 	private ImageIcon ledOff;
+	private JTextField jTextFieldSite;
+	private JTextField jTextFieldKodeUnit;
+	private JTextField jTextFieldNRP;
+	private JTextField jTextFieldName;
+	private JButton splitButton;
+	private JLabel jLabelSite;
+	private JLabel jLabelKodeUnit;
+	private JLabel jLabelNRP;
+	private JLabel jLabelNama;
+	private JPanel jPanelID;
 	private JPanel jPanelControl;
 	private JPanel jPanelTop;
+	private String[] judul= {"No","Digging", "Swing Loaded", "Dumping", "SwingUnloaded", "CYCLE TIME", "WAIT DT", "REPOSISI","REPAIR FRONT"};
+	private Object[][] data= {};
 
 	/**
 	* Auto-generated main method to display this JFrame
@@ -92,14 +113,14 @@ public class UIFrame extends javax.swing.JFrame {
 			jPanelTop = new JPanel();
 			GridBagLayout jPanelTopLayout = new GridBagLayout();
 			getContentPane().add(jPanelTop, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-			jPanelTopLayout.rowWeights = new double[] {0.1, 0.1};
-			jPanelTopLayout.rowHeights = new int[] {20, 7};
+			jPanelTopLayout.rowWeights = new double[] {0.1, 0.1, 0.1};
+			jPanelTopLayout.rowHeights = new int[] {20, 20, 7};
 			jPanelTopLayout.columnWeights = new double[] {0.0, 0.1};
 			jPanelTopLayout.columnWidths = new int[] {300, 7};
 			jPanelTop.setLayout(jPanelTopLayout);
 			{
 				timeWindow = new JLabel(stopWatch.toString());
-				jPanelTop.add(timeWindow, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+				jPanelTop.add(timeWindow, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 				timeWindow.setFont(new Font("Calibri", Font.BOLD, 32)); 
 				timeWindow.setForeground(new java.awt.Color(255,128,0));
 				timeWindow.setPreferredSize(new java.awt.Dimension(229, 97));
@@ -111,7 +132,7 @@ public class UIFrame extends javax.swing.JFrame {
 				jPanelControlLayout.rowHeights = new int[] {7, 7, 7, 7};
 				jPanelControlLayout.columnWeights = new double[] {0.0, 0.1};
 				jPanelControlLayout.rowWeights = new double[] {0.1, 0.1, 0.1, 0.1};
-				jPanelTop.add(jPanelControl, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				jPanelTop.add(jPanelControl, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 				jPanelControl.setLayout(jPanelControlLayout);
 				{
 					stopButton = new JButton("Stop");
@@ -139,6 +160,58 @@ public class UIFrame extends javax.swing.JFrame {
 					ledLabel.setIcon(ledOff);
 					ledLabel.setPreferredSize(new Dimension(32,32));
 				}
+				{
+					splitButton = new JButton();
+					jPanelControl.add(splitButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					splitButton.setText("Split");
+					splitButton.setPreferredSize(new java.awt.Dimension(100, 30));
+				}
+			}
+			{
+				jPanelID = new JPanel();
+				GridBagLayout jPanelIDLayout = new GridBagLayout();
+				jPanelTop.add(jPanelID, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				jPanelIDLayout.rowWeights = new double[] {0.0, 0.0, 0.0, 0.0};
+				jPanelIDLayout.rowHeights = new int[] {30, 31, 28, 29};
+				jPanelIDLayout.columnWeights = new double[] {0.0, 0.0, 0.1};
+				jPanelIDLayout.columnWidths = new int[] {7, 109, 7};
+				jPanelID.setLayout(jPanelIDLayout);
+				{
+					jLabelNama = new JLabel();
+					jPanelID.add(jLabelNama, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jLabelNama.setText("NAMA :");
+				}
+				{
+					jLabelNRP = new JLabel();
+					jPanelID.add(jLabelNRP, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jLabelNRP.setText("NRP :");
+				}
+				{
+					jLabelKodeUnit = new JLabel();
+					jPanelID.add(jLabelKodeUnit, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jLabelKodeUnit.setText("KODE UNIT :");
+				}
+				{
+					jLabelSite = new JLabel();
+					jPanelID.add(jLabelSite, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jLabelSite.setText("SITE :");
+				}
+				{
+					jTextFieldName = new JTextField();
+					jPanelID.add(jTextFieldName, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+				}
+				{
+					jTextFieldNRP = new JTextField();
+					jPanelID.add(jTextFieldNRP, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+				}
+				{
+					jTextFieldKodeUnit = new JTextField();
+					jPanelID.add(jTextFieldKodeUnit, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+				}
+				{
+					jTextFieldSite = new JTextField();
+					jPanelID.add(jTextFieldSite, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+				}
 			}
 			{
 				
@@ -148,42 +221,21 @@ public class UIFrame extends javax.swing.JFrame {
 		{
 			jPanelTable = new JPanel();
 			GridBagLayout jPanelTableLayout = new GridBagLayout();
-			jPanelTableLayout.columnWidths = new int[] {7, 7};
+			jPanelTableLayout.columnWidths = new int[] {7, 7, 7};
 			jPanelTableLayout.rowHeights = new int[] {7};
-			jPanelTableLayout.columnWeights = new double[] {0.1, 0.1};
+			jPanelTableLayout.columnWeights = new double[] {0.0, 0.1, 0.0};
 			jPanelTableLayout.rowWeights = new double[] {0.1};
 			getContentPane().add(jPanelTable, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			jPanelTable.setLayout(jPanelTableLayout);
 			{
 				jScrollPane1 = new JScrollPane();
-				jPanelTable.add(jScrollPane1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				jPanelTable.add(jScrollPane1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 				{
 					TableModel jTableMainModel = 
-							new DefaultTableModel(
-									new String[][] { { "One", "Two" }, { "Three", "Four" } },
-									new String[] { "Column 1", "Column 2" });
+							new DefaultTableModel(data, judul);
 					jTableMain = new JTable();
 					jScrollPane1.setViewportView(jTableMain);
 					jTableMain.setModel(jTableMainModel);
-				}
-			}
-			{
-				jScrollPane2 = new JScrollPane();
-				jPanelTable.add(jScrollPane2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-				{
-					TableModel jTableAuxModel = 
-							new DefaultTableModel(
-									new String[][] { { "One", "Two" }, { "Three", "Four" } },
-									new String[] { "Column 1", "Column 2" });
-					jTableAux = new JTable();
-					jScrollPane2.setViewportView(jTableAux);
-					GridBagLayout jTableAuxLayout = new GridBagLayout();
-					jTableAuxLayout.columnWidths = new int[] {7, 7, 7, 7};
-					jTableAuxLayout.rowHeights = new int[] {7, 7, 7, 7};
-					jTableAuxLayout.columnWeights = new double[] {0.1, 0.1, 0.1, 0.1};
-					jTableAuxLayout.rowWeights = new double[] {0.1, 0.1, 0.1, 0.1};
-					jTableAux.setModel(jTableAuxModel);
-					jTableAux.setLayout(null);
 				}
 			}
 		}
@@ -199,7 +251,7 @@ public class UIFrame extends javax.swing.JFrame {
 			getContentPane().setLayout(thisLayout);
 			initStopWatch();
 			pack();
-			this.setSize(755, 550);
+			this.setSize(793, 550);
 		} catch (Exception e) {
 		    //add your error handling code here
 			e.printStackTrace();
