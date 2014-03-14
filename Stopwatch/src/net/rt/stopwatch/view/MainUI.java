@@ -9,6 +9,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,6 +28,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.SwingUtilities;
 
+import net.rt.stopwatch.controller.ExcelHandler;
+import net.rt.stopwatch.model.Operator;
+import net.rt.stopwatch.model.SimulationResult;
 import net.rt.stopwatch.model.StopWatch;
 
 
@@ -92,7 +99,7 @@ public class MainUI extends javax.swing.JFrame {
 	private String[] judul2= {"WAIT DT","REPOSISI", "REPAIR FRONT"};
 	//, "WAIT DT","REPOSISI", "REPAIR FRONT"};
 	private Object[][] data= {};
-	private Object[][] data2= {};
+	private Object[][] data2= new Object[1][3];
 
 	private int kolom=0;
 	private int baris=0;
@@ -102,6 +109,12 @@ public class MainUI extends javax.swing.JFrame {
 	private int waitCount=0;
 	private int reposisiCount=0;
 	private int frontCount=0;
+	private final int COL_NO=0;
+	private final int COL_DIGGING=1;
+	private final int COL_SWING_LOADED=2;
+	private final int COL_DUMPING=3;
+	private final int COL_SWING_UNLOADED=4;
+	private final int COL_CYCLE_TIME=5;
 
 	/**
 	* Auto-generated main method to display this JFrame
@@ -333,6 +346,11 @@ public class MainUI extends javax.swing.JFrame {
 				jPanelButtom.add(jButtonXLS, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 				jButtonXLS.setText("SAVE");
 				jButtonXLS.setPreferredSize(new java.awt.Dimension(100, 30));
+				jButtonXLS.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						jButtonXLSActionPerformed(evt);
+					}
+				});
 			}
 		}
 	}
@@ -385,11 +403,18 @@ public class MainUI extends javax.swing.JFrame {
 	}
 	
 	private void updateAux(String wait, int baris2, int kolom2){
-		Object [][] temp = new Object[data2.length+1][3];
+		Object [][] temp =null;
+		if(baris2>=data2.length){
+			temp = new Object[data2.length+1][3];
+		}
+		else{
+			temp = new Object[data2.length][3];
+		}
+
 		//inisialisasi
 		for(int brs=0;brs<data2.length;brs++)
 		{
-			for(int klm=0;klm<3;klm++)
+			for(int klm=0;klm<=2;klm++)
 			{
 				temp[brs][klm]=data2[brs][klm];
 			}
@@ -432,5 +457,44 @@ public class MainUI extends javax.swing.JFrame {
 			kolom=0;
 			baris++;
 		}
+	}
+	
+	private void jButtonXLSActionPerformed(ActionEvent evt) {
+		Thread t= new Thread()
+		{
+			public void run()
+			{
+				dataCollector();
+
+			}
+			
+		};
+		t.start();
+	}
+	
+	private void dataCollector(){
+//		
+//		for(int i=0; i<data.length; i++)
+//		{
+//			data[i][COL_NO].toString();
+//			data[i][COL_SWING_LOADED].toString();
+//			data[i][COL_DUMPING].toString();
+//			data[i][COL_SWING_UNLOADED].toString();
+//			data[i][COL_CYCLE_TIME].toString(); 
+//		
+//		}
+		SimulationResult sim=new SimulationResult();
+		Operator op=new Operator();
+		op.setName(jTextFieldNama.getText());
+		op.setNrp(jTextFieldNRP.getText());
+		op.setKU(jTextFieldKU.getText());
+		op.setSite(jTextFieldSITE.getText());
+		sim.setOperator(op);
+		sim.setData(data);
+		sim.setData2(data2);
+		
+		ExcelHandler handler=new ExcelHandler();
+		handler.printTask(sim);
+		
 	}
 }
