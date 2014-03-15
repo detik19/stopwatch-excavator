@@ -150,15 +150,17 @@ public class ExcelHandler {
 			row.getCell(COL_TANGGAL).setCellStyle(styles.get("konten"));
 			row.getCell(COL_JAM).setCellStyle(styles.get("konten"));
 
-			createCell(row, COL_NO, data[i][0], styles);
-			createCell(row, COL_DIGTIME, data[i][1], styles);
-			createCell(row, COL_SWING_LOADED, data[i][2], styles);
-			createCell(row, COL_DUMPING_TIME, data[i][3], styles);
-			createCell(row, COL_SWING_EMPTY, data[i][4], styles);
-			createCell(row, COL_CYCLE_TIME, data[i][5], styles);
-		
-			
+			writeToCell(row, COL_NO, data[i][0], styles);
+			writeToCell(row, COL_DIGTIME, data[i][1], styles);
+			writeToCell(row, COL_SWING_LOADED, data[i][2], styles);
+			writeToCell(row, COL_DUMPING_TIME, data[i][3], styles);
+			writeToCell(row, COL_SWING_EMPTY, data[i][4], styles);
+			writeToCell(row, COL_CYCLE_TIME, data[i][5], styles);
+			writeToCell(row, COL_WAIT_DT, data2[i][0], styles);
+			writeToCell(row, COL_REPOSISI, data2[i][1], styles);
+			writeToCell(row, COL_REPAIR_FRONT, data2[i][2], styles);
 
+			
 			
 			
 		}
@@ -171,7 +173,7 @@ public class ExcelHandler {
 	   //  Map<String, CellStyle> styles = createStyles(wb);
 	}
 	
-	private void createCell(Row row, int col, Object value, Map<String, CellStyle> styles){
+	private void writeToCell(Row row, int col, Object value, Map<String, CellStyle> styles){
 		if(value !=null){
 			row.createCell(col).setCellValue(value.toString());
 			row.getCell(col).setCellStyle(styles.get("konten"));
