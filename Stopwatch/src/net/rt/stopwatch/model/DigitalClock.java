@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.SimpleTimeZone;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ public class DigitalClock extends JLabel {
 	private String pattern;
 	private Timer timer;
 	private int delay;
+	private Date date;
 	/**
 	 * Constructs a Digital Clock using the given pattern and the default delay.
 	 * @param pattern - the pattern describing the date and time format 
@@ -39,8 +41,10 @@ public class DigitalClock extends JLabel {
 	/**
 	 * Constructs a Digital Clock using the default pattern and delay.
 	 */
+	
 	public DigitalClock(){
 		pattern = "hh:mm:ss a";
+	
 		this.delay = 1000;
 		createTimer();
 		timer.start();
@@ -49,11 +53,17 @@ public class DigitalClock extends JLabel {
 		timer = new Timer(delay, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				setText(new SimpleDateFormat(pattern).format(new Date()));
+				//setText(new SimpleDateFormat(pattern).format(new Date()));
+				setText(Date2DateAndTimeStr(new Date()));
 			}
 		});
 	}
+	public static String Date2DateAndTimeStr(Date date){
+		SimpleDateFormat sdp=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		sdp.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
 
+		return sdp.format(date);
+	}
 	public String getPattern() {
 		return pattern;
 	}
@@ -72,16 +82,4 @@ public class DigitalClock extends JLabel {
 		this.delay = delay;
 	}
 	
-//	public static void main(String[] args){
-//		JFrame frame = new JFrame();
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setBounds(100, 100, 193, 72);
-//		JPanel contentPane = new JPanel();
-//		frame.setContentPane(contentPane);
-//		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-//		
-//		DigitalClock digitalClock = new DigitalClock();
-//		contentPane.add(digitalClock);
-//		frame.setVisible(true);
-//	}
 }

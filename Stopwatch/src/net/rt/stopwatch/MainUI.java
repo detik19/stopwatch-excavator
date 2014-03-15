@@ -1,16 +1,11 @@
 package net.rt.stopwatch;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -51,6 +46,11 @@ import javax.swing.BorderFactory;
 */
 public class MainUI extends javax.swing.JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2857907104255401245L;
+
 	{
 		//Set Look & Feel
 		try {
@@ -60,7 +60,6 @@ public class MainUI extends javax.swing.JFrame {
 		}
 	}
 	private JPanel jPanelTime;
-	private StopWatch stopWatch1;
 	private DigitalClock digitalClock1;
 	private JButton splitButton;
 	private JButton jButtonSave;
@@ -85,7 +84,6 @@ public class MainUI extends javax.swing.JFrame {
 	private JButton repairFrontButton;
 	private JButton reposisiButton;
 	private JButton waitDTButton;
-	private JButton jButtonXLS;
 	private Timer timer;
 	private StopWatch stopWatch;
 	
@@ -96,9 +94,8 @@ public class MainUI extends javax.swing.JFrame {
 	private JPanel jPanelCtl;
 	private JPanel jPanelID;
 	
-	private String[] judul= {"No","Digging", "Swing Loaded", "Dumping", "SwingUnloaded", "CYCLE TIME"};
+	private String[] judul= {"NO","DIGGING", "SWING LOADED", "DUMPING", "SWING UNLOADED", "CYCLE TIME"};
 	private String[] judul2= {"WAIT DT","REPOSISI", "REPAIR FRONT"};
-	//, "WAIT DT","REPOSISI", "REPAIR FRONT"};
 	private Object[][] data= {};
 	private Object[][] data2= new Object[1][3];
 
@@ -181,12 +178,14 @@ public class MainUI extends javax.swing.JFrame {
 					stopButton = new JButton("Stop");
 					jPanelCtl.add(stopButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					stopButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					stopButton.setMnemonic(java.awt.event.KeyEvent.VK_Z);
 					stopButton.addActionListener(listener);
 				}
 				{
 					startButton = new JButton("Start");
 					jPanelCtl.add(startButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					startButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					startButton.setMnemonic(java.awt.event.KeyEvent.VK_A);
 					startButton.addActionListener(listener);
 					
 				}
@@ -194,35 +193,40 @@ public class MainUI extends javax.swing.JFrame {
 					resetButton = new JButton("Reset");
 					jPanelCtl.add(resetButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					resetButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					resetButton.setMnemonic(java.awt.event.KeyEvent.VK_X);
 					resetButton.addActionListener(listener);
 				}
 				{
 					splitButton = new JButton();
-					jPanelCtl.add(splitButton, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelCtl.add(splitButton, new GridBagConstraints(1, -1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					splitButton.setText("Split");
 					splitButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					splitButton.setMnemonic(java.awt.event.KeyEvent.VK_S);
 					splitButton.addActionListener(listener);
 				}
 				{
 					waitDTButton = new JButton();
-					jPanelCtl.add(waitDTButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelCtl.add(waitDTButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					waitDTButton.setText("WAIT DT");
 					waitDTButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					waitDTButton.setMnemonic(java.awt.event.KeyEvent.VK_D);
 					waitDTButton.addActionListener(listener);
 					
 				}
 				{
 					reposisiButton = new JButton();
-					jPanelCtl.add(reposisiButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelCtl.add(reposisiButton, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					reposisiButton.setText("REPOSISI");
 					reposisiButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					reposisiButton.setMnemonic(java.awt.event.KeyEvent.VK_F);
 					reposisiButton.addActionListener(listener);
 				}
 				{
 					repairFrontButton = new JButton();
-					jPanelCtl.add(repairFrontButton, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelCtl.add(repairFrontButton, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					repairFrontButton.setText("REPAIR FRONT");
 					repairFrontButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					repairFrontButton.setMnemonic(java.awt.event.KeyEvent.VK_G);
 					repairFrontButton.addActionListener(listener);
 					
 				}
@@ -349,6 +353,8 @@ public class MainUI extends javax.swing.JFrame {
 				jPanelBottom.add(digitalClock1, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 				digitalClock1.setText("digitalClock1");
 				digitalClock1.setFont(new java.awt.Font("Segoe UI",1,16));
+				digitalClock1.setBackground(new java.awt.Color(255,128,0));
+				digitalClock1.setBorder(BorderFactory.createTitledBorder(""));
 			}
 		}
 		{
