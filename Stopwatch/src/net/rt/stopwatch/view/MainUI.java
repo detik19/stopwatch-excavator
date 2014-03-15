@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -109,6 +110,8 @@ public class MainUI extends javax.swing.JFrame {
 	private int waitCount=0;
 	private int reposisiCount=0;
 	private int frontCount=0;
+	private SimulationResult sim;
+
 	private final int COL_NO=0;
 	private final int COL_DIGGING=1;
 	private final int COL_SWING_LOADED=2;
@@ -368,6 +371,8 @@ public class MainUI extends javax.swing.JFrame {
 			
 			if(event.getSource() == startButton) {	
 				timer.start();
+				sim=new SimulationResult();
+				sim.setDate(new Date());
 			}
 
 			if(event.getSource() == stopButton) {
@@ -483,7 +488,6 @@ public class MainUI extends javax.swing.JFrame {
 //			data[i][COL_CYCLE_TIME].toString(); 
 //		
 //		}
-		SimulationResult sim=new SimulationResult();
 		Operator op=new Operator();
 		op.setName(jTextFieldNama.getText());
 		op.setNrp(jTextFieldNRP.getText());

@@ -23,12 +23,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.SwingUtilities;
 
+import net.rt.stopwatch.controller.ExcelHandler;
+import net.rt.stopwatch.model.DigitalClock;
+import net.rt.stopwatch.model.Operator;
+import net.rt.stopwatch.model.SimulationResult;
 import net.rt.stopwatch.model.StopWatch;
 import de.javasoft.plaf.synthetica.SyntheticaBlueMoonLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
+
 import javax.swing.BorderFactory;
 
 /**
@@ -53,7 +59,9 @@ public class MainUI extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 	}
-
+	private JPanel jPanelTime;
+	private StopWatch stopWatch1;
+	private DigitalClock digitalClock1;
 	private JButton splitButton;
 	private JButton jButtonSave;
 	private JLabel jLabelIMG;
@@ -102,7 +110,8 @@ public class MainUI extends javax.swing.JFrame {
 	private int waitCount=0;
 	private int reposisiCount=0;
 	private int frontCount=0;
-	
+	private SimulationResult sim;
+
 	/**
 	* Auto-generated main method to display this JFrame
 	*/
@@ -160,14 +169,6 @@ public class MainUI extends javax.swing.JFrame {
 			jPanelIDLayout.columnWidths = new int[] {7, 399, 7};
 			jPanelID.setLayout(jPanelIDLayout);
 			{
-				timeWindow = new JLabel();
-				jPanelID.add(timeWindow, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-				timeWindow.setText(stopWatch.toString());
-				timeWindow.setForeground(Color.ORANGE);
-				timeWindow.setFont(new java.awt.Font("Calibri",1,62));
-				timeWindow.setPreferredSize(new java.awt.Dimension(229,97));
-			}
-			{
 				jPanelCtl = new JPanel();
 				GridBagLayout jPanelCtlLayout = new GridBagLayout();
 				jPanelID.add(jPanelCtl, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -200,24 +201,30 @@ public class MainUI extends javax.swing.JFrame {
 					jPanelCtl.add(splitButton, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					splitButton.setText("Split");
 					splitButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					splitButton.addActionListener(listener);
 				}
 				{
 					waitDTButton = new JButton();
 					jPanelCtl.add(waitDTButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					waitDTButton.setText("WAIT DT");
 					waitDTButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					waitDTButton.addActionListener(listener);
+					
 				}
 				{
 					reposisiButton = new JButton();
 					jPanelCtl.add(reposisiButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					reposisiButton.setText("REPOSISI");
 					reposisiButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					reposisiButton.addActionListener(listener);
 				}
 				{
 					repairFrontButton = new JButton();
 					jPanelCtl.add(repairFrontButton, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					repairFrontButton.setText("REPAIR FRONT");
 					repairFrontButton.setPreferredSize(new java.awt.Dimension(120, 30));
+					repairFrontButton.addActionListener(listener);
+					
 				}
 			}
 			{
@@ -264,6 +271,19 @@ public class MainUI extends javax.swing.JFrame {
 				{
 					jTextFieldSite = new JTextField();
 					jPanelOP.add(jTextFieldSite, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+				}
+			}
+			{
+				jPanelTime = new JPanel();
+				jPanelID.add(jPanelTime, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				jPanelTime.setLayout(null);
+				{
+					timeWindow = new JLabel();
+					jPanelTime.add(timeWindow);
+					timeWindow.setText(stopWatch.toString());
+					timeWindow.setForeground(Color.ORANGE);
+					timeWindow.setFont(new java.awt.Font("Calibri",1,62));
+					timeWindow.setBounds(110, 19, 229, 97);
 				}
 			}
 		}
@@ -318,6 +338,17 @@ public class MainUI extends javax.swing.JFrame {
 				jPanelBottom.add(jButtonSave, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 				jButtonSave.setText("SAVE");
 				jButtonSave.setPreferredSize(new java.awt.Dimension(120, 30));
+				jButtonSave.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						jButtonSaveActionPerformed(evt);
+					}
+				});
+			}
+			{
+				digitalClock1 = new DigitalClock();
+				jPanelBottom.add(digitalClock1, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+				digitalClock1.setText("digitalClock1");
+				digitalClock1.setFont(new java.awt.Font("Segoe UI",1,16));
 			}
 		}
 		{
@@ -329,7 +360,7 @@ public class MainUI extends javax.swing.JFrame {
 				jPanelTitle.add(jLabel1);
 				jLabel1.setText("PERHITUNGAN CYCLE TIME EXCAVATOR");
 				jLabel1.setFont(new java.awt.Font("Segoe UI",1,20));
-				jLabel1.setBounds(205, 26, 383, 27);
+				jLabel1.setBounds(205, 26, 573, 27);
 			}
 			{
 				jLabelIMG = new JLabel();
@@ -348,11 +379,15 @@ public class MainUI extends javax.swing.JFrame {
 	}
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
+
 			if(event.getSource() == startButton) {	
 				timer.start();
+				sim=new SimulationResult();
+				sim.setDate(new Date());
 			}
 
 			if(event.getSource() == stopButton) {
+//				ledLabel.setIcon(ledOn);
 				timer.stop();
 			}
 
@@ -361,9 +396,116 @@ public class MainUI extends javax.swing.JFrame {
 				stopWatch.reset();
 			}
 			
+			if(event.getSource() == splitButton){
+				updateTable(stopWatch.toString());
+			}
+			
+			if(event.getSource()== waitDTButton){
+				updateAux(stopWatch.toString(),waitCount,0);
+				waitCount++;
+			}
+			
+			if(event.getSource()== reposisiButton){
+				updateAux(stopWatch.toString(),reposisiCount,1);
+				reposisiCount++;
+			}
+			
+			if(event.getSource()==repairFrontButton){
+				updateAux(stopWatch.toString(),frontCount,2);
+				frontCount++;
+			}
 			timeWindow.setText(stopWatch.toString());
 		}
 
 	
 	}
+	
+	private void updateAux(String wait, int baris2, int kolom2){
+		Object [][] temp =null;
+		if(baris2>=data2.length){
+			temp = new Object[data2.length+1][3];
+		}
+		else{
+			temp = new Object[data2.length][3];
+		}
+
+		//inisialisasi
+		for(int brs=0;brs<data2.length;brs++)
+		{
+			for(int klm=0;klm<=2;klm++)
+			{
+				temp[brs][klm]=data2[brs][klm];
+			}
+		}		
+		
+		temp[baris2][kolom2]=wait;
+		data2=temp;
+		jTableData2.setModel(new DefaultTableModel(data2, judul2));
+		
+		
+	}
+	
+	
+	private void updateTable(String value){
+		//jumlah array 1
+		Object [][] temp = new Object[baris+1][6];
+		
+		//inisialisasi
+		for(int brs=0;brs<data.length;brs++)
+
+		{
+			for(int klm=0;klm<6;klm++)
+			{
+				temp[brs][klm]=data[brs][klm];
+			}
+		}		
+		if(kolom==0){
+			temp[baris][kolom]=baris+1;
+			kolom++;
+		}
+		//array ke satu=0
+		temp[baris][kolom]=value;
+
+		data=temp;
+		jTableData1.setModel(new DefaultTableModel(data, judul));
+		
+		if(kolom<5){
+			kolom++;
+		}else{
+			kolom=0;
+			baris++;
+		}
+	}
+	
+	
+	private void dataCollector(){
+
+		Operator op=new Operator();
+		op.setName(jTextFieldNama.getText());
+		op.setNrp(jTextFieldNRP.getText());
+		op.setKU(jTextFieldKU.getText());
+		op.setSite(jTextFieldSite.getText());
+		sim.setOperator(op);
+		sim.setData(data);
+		sim.setData2(data2);
+		
+		ExcelHandler handler=new ExcelHandler();
+		handler.printTask(sim);
+		
+	}
+	
+	private void jButtonSaveActionPerformed(ActionEvent evt) {
+		Thread t= new Thread()
+		{
+			public void run()
+			{
+				dataCollector();
+
+			}
+			
+		};
+		t.start();
+	}
+	
+	
 }

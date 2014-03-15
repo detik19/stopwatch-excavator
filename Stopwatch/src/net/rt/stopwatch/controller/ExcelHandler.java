@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.rt.stopwatch.model.SimulationResult;
+import net.rt.stopwatch.util.Util;
 
 import org.apache.poi.ss.formula.CollaboratingWorkbooksEnvironment;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -142,8 +143,9 @@ public class ExcelHandler {
 
 			row.createCell(COL_NAMA).setCellValue(sim.getOperator().getName());
 			row.createCell(COL_NRP).setCellValue(sim.getOperator().getNrp());
-			row.createCell(COL_TANGGAL).setCellValue("");
-			row.createCell(COL_JAM).setCellValue("");
+			row.createCell(COL_TANGGAL).setCellValue(Util.Date2String(sim.getDate()));
+			row.createCell(COL_JAM).setCellValue(Util.Date2TimeStr(sim.getDate()));
+			
 			
 			row.getCell(COL_NAMA).setCellStyle(styles.get("konten"));
 			row.getCell(COL_NRP).setCellStyle(styles.get("konten"));
@@ -179,8 +181,8 @@ public class ExcelHandler {
 			row.getCell(col).setCellStyle(styles.get("konten"));
 
 		}else{
-			row.createCell(COL_NO).setCellValue("");
-			row.getCell(COL_NO).setCellStyle(styles.get("konten"));
+			row.createCell(col).setCellValue("");
+			row.getCell(col).setCellStyle(styles.get("konten"));
 		}
 	}
 	private void createXLSX(Workbook wb, String strfile) {

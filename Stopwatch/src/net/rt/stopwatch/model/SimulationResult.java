@@ -1,11 +1,14 @@
 package net.rt.stopwatch.model;
 
+import java.util.Date;
+
 
 
 public class SimulationResult {
 	private Operator operator;
 	private Object[][] data= {};
 	private Object[][] data2= {};
+	private Date date;
 //	private String[] no;
 //	private String[] swingTimeLoaded;
 //	private String[] dumpingTime;
@@ -19,6 +22,12 @@ public class SimulationResult {
 	
 	public Operator getOperator() {
 		return operator;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	public void setOperator(Operator operator) {
 		this.operator = operator;
