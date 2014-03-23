@@ -118,7 +118,7 @@ public class ExcelHandler {
 	     
 	     return styles;
 	 }
-	public void printTask(SimulationResult sim){
+	public void printTask(SimulationResult sim, String file){
 		Workbook wb = new XSSFWorkbook();
 		Sheet sheet = wb.createSheet("TEST");
 	     Map<String, CellStyle> styles = createStyles(wb);
@@ -170,8 +170,7 @@ public class ExcelHandler {
 		
 		
 		
-		createXLSX(wb, "D:\\test.xlsx");
-		System.out.println("finish");
+		createXLSX(wb,file);
 	   //  Map<String, CellStyle> styles = createStyles(wb);
 	}
 	

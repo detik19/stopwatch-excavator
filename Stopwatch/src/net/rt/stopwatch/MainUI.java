@@ -5,7 +5,9 @@ import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -14,6 +16,7 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.SwingUtilities;
@@ -28,6 +31,7 @@ import de.javasoft.plaf.synthetica.SyntheticaBlueMoonLookAndFeel;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -45,24 +49,35 @@ import javax.swing.BorderFactory;
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
 public class MainUI extends javax.swing.JFrame {
+
+	{
+		//Set Look & Feel
+		try {
+			javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2857907104255401245L;
 
-	{
-		//Set Look & Feel
-		try {
-			UIManager.setLookAndFeel(new SyntheticaBlueMoonLookAndFeel());
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	{
+//		//Set Look & Feel
+//		try {
+//			UIManager.setLookAndFeel(new SyntheticaBlueMoonLookAndFeel());
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	private JPanel jPanelTime;
 	private DigitalClock digitalClock1;
 	private JButton splitButton;
 	private JButton jButtonSave;
+	private JButton ClearButton;
 	private JLabel jLabelIMG;
 	private JLabel jLabel1;
 	private JPanel jPanelTitle;
@@ -98,7 +113,7 @@ public class MainUI extends javax.swing.JFrame {
 	private String[] judul2= {"WAIT DT","REPOSISI", "REPAIR FRONT"};
 	private Object[][] data= {};
 	private Object[][] data2= new Object[1][3];
-
+	private Object[][] kosong={};
 	private int kolom=0;
 	private int baris=0;
 	//private int kolom2=0;
@@ -117,6 +132,7 @@ public class MainUI extends javax.swing.JFrame {
 			public void run() {
 				MainUI inst = new MainUI();
 				inst.setLocationRelativeTo(null);
+				inst.setResizable(false);
 				inst.setVisible(true);
 			}
 		});
@@ -139,6 +155,8 @@ public class MainUI extends javax.swing.JFrame {
 			initStopWatch();
 			pack();
 			this.setSize(806, 705);
+			this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("net/rt/stopwatch/pama3.png")).getImage());
+			this.setTitle("PERHITUNGAN CYCLE TIME EXCAVATOR");
 		} catch (Exception e) {
 		    //add your error handling code here
 			e.printStackTrace();
@@ -333,8 +351,8 @@ public class MainUI extends javax.swing.JFrame {
 			GridBagLayout jPanelBottomLayout = new GridBagLayout();
 			jPanelBottomLayout.rowWeights = new double[] {0.1};
 			jPanelBottomLayout.rowHeights = new int[] {7};
-			jPanelBottomLayout.columnWeights = new double[] {0.1, 0.1, 0.1, 0.1};
-			jPanelBottomLayout.columnWidths = new int[] {7, 7, 7, 7};
+			jPanelBottomLayout.columnWeights = new double[] {0.1, 0.0, 0.1, 0.1};
+			jPanelBottomLayout.columnWidths = new int[] {7, 221, 7, 7};
 			jPanelBottom.setLayout(jPanelBottomLayout);
 			getContentPane().add(jPanelBottom, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			{
@@ -355,6 +373,17 @@ public class MainUI extends javax.swing.JFrame {
 				digitalClock1.setFont(new java.awt.Font("Segoe UI",1,16));
 				digitalClock1.setBackground(new java.awt.Color(255,128,0));
 				digitalClock1.setBorder(BorderFactory.createTitledBorder(""));
+			}
+			{
+				ClearButton = new JButton();
+				jPanelBottom.add(ClearButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+				ClearButton.setText("CLEAR");
+				ClearButton.setPreferredSize(new java.awt.Dimension(120, 30));
+				ClearButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						ClearButtonActionPerformed(evt);
+					}
+				});
 			}
 		}
 		{
@@ -486,6 +515,67 @@ public class MainUI extends javax.swing.JFrame {
 	
 	private void dataCollector(){
 
+		
+		File saveFile = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel Files", "xlsx"));
+
+//        while (true) 
+//        {
+            int choice = fileChooser.showSaveDialog(this);
+          
+            if (choice == JFileChooser.APPROVE_OPTION) 
+            {
+                File chosen = fileChooser.getSelectedFile();
+                if (!chosen.exists()) 
+                {
+                    saveFile = chosen;
+                    //TODO
+                    String strFile=saveFile.getAbsolutePath();
+                    if (!strFile.endsWith(".xlsx")){
+                    	strFile+=".xlsx";
+                    	exe(strFile);
+
+                    }
+                    
+                    
+                    //break;
+                } 
+                else 
+                {
+                    int confirm =
+                        JOptionPane.showConfirmDialog
+                        (
+                            this,
+                            "Overwrite file? " + chosen.getName());
+                    if (confirm == JOptionPane.OK_OPTION) 
+                    {
+                        String strFile=saveFile.getAbsolutePath();
+                        if (!strFile.endsWith(".xlsx")){
+                        	strFile+=".xlsx";
+                        	exe(strFile);
+
+                        }
+                    } 
+                    else if 
+                    (confirm == JOptionPane.NO_OPTION) 
+                    {
+                       // continue;
+                    }
+                   // break;
+                }
+            } 
+            else 
+            {
+                //break;
+            }
+//        }
+
+		//exe();
+		
+	}
+
+	private void exe(String file) {
 		Operator op=new Operator();
 		op.setName(jTextFieldNama.getText());
 		op.setNrp(jTextFieldNRP.getText());
@@ -496,8 +586,7 @@ public class MainUI extends javax.swing.JFrame {
 		sim.setData2(data2);
 		
 		ExcelHandler handler=new ExcelHandler();
-		handler.printTask(sim);
-		
+		handler.printTask(sim, file);
 	}
 	
 	private void jButtonSaveActionPerformed(ActionEvent evt) {
@@ -505,6 +594,7 @@ public class MainUI extends javax.swing.JFrame {
 		{
 			public void run()
 			{
+				
 				dataCollector();
 
 			}
@@ -513,5 +603,19 @@ public class MainUI extends javax.swing.JFrame {
 		t.start();
 	}
 	
-	
+	private void ClearButtonActionPerformed(ActionEvent evt) {
+		jTextFieldNama.setText("");
+		jTextFieldKU.setText("");
+		jTextFieldSite.setText("");
+		jTextFieldNRP.setText("");
+		data=kosong;
+		data2=kosong;
+		jTableData2.setModel(new DefaultTableModel(data, judul2));
+		jTableData1.setModel(new DefaultTableModel(data2, judul));
+		stopButton.doClick();
+		resetButton.doClick();
+
+
+	}
+
 }
